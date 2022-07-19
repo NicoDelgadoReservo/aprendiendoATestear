@@ -37,11 +37,29 @@ input.click()
 
 ### Login ###
 ### Crear cita ###
-# TODO: Agregar "camino" para clientedemo (agenda por box) y cuando en agenda por profesional ya existe una cita
+# TODO:
+# - Agregar "camino" para clientedemo (agenda por box)
+# - Mejorar creacion de citas para que busque primero en mismo día y luego cambie
+# de semana o día
 
 calendario = driver.find_element(By.CLASS_NAME, 'fc-agenda-slots')
 slot6 = calendario.find_element(By.CLASS_NAME, 'fc-slot6')
-slot6.click()
+next_button = driver.find_element(By.ID, 'next')
+calendario_con_eventos = driver.find_element(By.ID, 'calendar')
+
+def trata_de_levantar_modal_de_reserva(elemento_para_reservar, next_button):
+    hizo_reserva = False
+    while not hizo_reserva:
+        try:
+            elemento_para_reservar.click()
+            hizo_reserva = True
+        except:
+            next_button.click()
+            sleep(1)
+
+trata_de_levantar_modal_de_reserva(slot6, next_button)
+cantidad_eventos_antes_agregar = len(calendario_con_eventos.find_elements(By.CLASS_NAME, 'fc-event')) - 1
+print("Eventos antes de pushear nuevo evento", cantidad_eventos_antes_agregar)
 
 barra_oficial = driver.find_element(By.ID, 'barra_oficial')
 profesional_actual = barra_oficial.find_element(By.TAG_NAME, 'button').get_attribute("title")
@@ -52,5 +70,9 @@ agenda_select.select_by_visible_text(profesional_actual)
 
 reservar_button = driver.find_element(By.ID, 'Reservar')
 reservar_button.click()
+sleep(1)
+
+cantidad_eventos_despues_agregar = len(calendario_con_eventos.find_elements(By.CLASS_NAME, 'fc-event'))
+print("Eventos después de pushear nuevo evento", cantidad_eventos_despues_agregar)
 
 ### Crear cita ###
