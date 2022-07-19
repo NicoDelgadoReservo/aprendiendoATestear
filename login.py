@@ -75,4 +75,6 @@ sleep(1)
 cantidad_eventos_despues_agregar = len(calendario_con_eventos.find_elements(By.CLASS_NAME, 'fc-event'))
 print("Eventos después de pushear nuevo evento", cantidad_eventos_despues_agregar)
 
+assert cantidad_eventos_antes_agregar == cantidad_eventos_despues_agregar - 1
+driver.quit()
 ### Crear cita ###
